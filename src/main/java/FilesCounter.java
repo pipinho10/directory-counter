@@ -7,21 +7,21 @@ import java.util.concurrent.RecursiveTask;
 
 import static java.util.Arrays.*;
 
-public class NumberOfDirectoriesCounter extends RecursiveTask<Integer> {
+public class FilesCounter extends RecursiveTask<Integer> {
     private static final int THRESHOLD = 10;
 
     private final File[] subDirectories;
 
-    private NumberOfDirectoriesCounter(File... subDirectories) {
+    private FilesCounter(File... subDirectories) {
         this.subDirectories = subDirectories;
     }
 
     public static void main(String[] args) {
         long start = System.nanoTime();
 
-        NumberOfDirectoriesCounter numberOfDirectoriesCounter = new NumberOfDirectoriesCounter(getChildNodes(new File(args[0])));
+        FilesCounter filesCounter = new FilesCounter(getChildNodes(new File(args[0])));
 
-        System.out.println(numberOfDirectoriesCounter.compute());
+        System.out.println(filesCounter.compute());
 
         long end = System.nanoTime();
 
@@ -40,14 +40,14 @@ public class NumberOfDirectoriesCounter extends RecursiveTask<Integer> {
         }
     }
 
-    private Collection<NumberOfDirectoriesCounter> createSubtasks() {
-        List<NumberOfDirectoriesCounter> dividedTasks = new ArrayList<>();
+    private Collection<FilesCounter> createSubtasks() {
+        List<FilesCounter> dividedTasks = new ArrayList<>();
 
-        dividedTasks.add(new NumberOfDirectoriesCounter(
+        dividedTasks.add(new FilesCounter(
                 copyOfRange(subDirectories, 0, subDirectories.length / 2)
         ));
 
-        dividedTasks.add(new NumberOfDirectoriesCounter(
+        dividedTasks.add(new FilesCounter(
                 copyOfRange(subDirectories, subDirectories.length / 2, subDirectories.length)
         ));
 
@@ -59,7 +59,7 @@ public class NumberOfDirectoriesCounter extends RecursiveTask<Integer> {
 
         for (File node : nodes) {
             if (node.isDirectory()) {
-                numberOfFiles += new NumberOfDirectoriesCounter(getChildNodes(node)).compute(); //calculateNumberOfFiles(getChildNodes(node));
+                numberOfFiles += new FilesCounter(getChildNodes(node)).compute(); //calculateNumberOfFiles(getChildNodes(node));
             } else {
                 numberOfFiles++;
             }
