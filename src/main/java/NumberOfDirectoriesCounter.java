@@ -17,9 +17,15 @@ public class NumberOfDirectoriesCounter extends RecursiveTask<Integer> {
     }
 
     public static void main(String[] args) {
+        long start = System.nanoTime();
+
         NumberOfDirectoriesCounter numberOfDirectoriesCounter = new NumberOfDirectoriesCounter(getChildNodes(new File(args[0])));
 
         System.out.println(numberOfDirectoriesCounter.compute());
+
+        long end = System.nanoTime();
+
+        System.out.println((end - start) / 1000000);
     }
 
     @Override
@@ -53,7 +59,7 @@ public class NumberOfDirectoriesCounter extends RecursiveTask<Integer> {
 
         for (File node : nodes) {
             if (node.isDirectory()) {
-                numberOfFiles += calculateNumberOfFiles(getChildNodes(node));
+                numberOfFiles += new NumberOfDirectoriesCounter(getChildNodes(node)).compute(); //calculateNumberOfFiles(getChildNodes(node));
             } else {
                 numberOfFiles++;
             }
