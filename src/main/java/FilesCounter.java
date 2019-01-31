@@ -59,7 +59,7 @@ public class FilesCounter extends RecursiveTask<Integer> {
 
         for (File node : nodes) {
             if (node.isDirectory()) {
-                numberOfFiles += new FilesCounter(getChildNodes(node)).compute();
+                numberOfFiles += new FilesCounter(getChildNodes(node)).compute(); // In case of directory create separate thread
             } else {
                 numberOfFiles++;
             }
